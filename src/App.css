@@ -8,6 +8,9 @@ body {
   line-height: 1.4;
   color: #1f1f1f;
 }
+.btn-spacing {
+  margin-right: 10px;
+}
 .container {
   max-width: 700px;
   margin: 0 auto;

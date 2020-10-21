@@ -12,24 +12,35 @@ class TodoItem extends React.Component {
       // destructuring
       const { completed, id, title } = this.props.todo
 
-      // the <input type='checkbox'/> is an uncontrolled input 
-      // it needs to be handled by the component state and not the DOM
-        // add 'checked'
+      // Want to add functionality for lists in lists to have additional checkboxes
+      // for complex todo items
         return (
           <li className="todo-item">
             <input 
               type='checkbox'
               checked={ completed }
-              // TodoItem cannot handle the onChange event
-              // it handles checkboxes but the parent (TodoContainer)
+              
+              // handle checkboxes but TodoContainer
               // holds state data
               onChange={() => this.props.handleChangeProps(id)}
               // so we are passing onChange upwards to TodosList
               // then upwards to TodoContainer
             />
+
+            {/* Delete Entry 
+              Passed up to TodoContainer and gives the values to delteTodo
+            */}
             <button onClick={() => this.props.deleteTodoProps(id)}>
               Delete
             </button>
+            
+            {/* TODO: EDIT ENTRY 
+                Passed up to TodoContainer to be handled by editTodo
+            */}
+            <button className="btn-spacing" onClick={() => this.props.editTodoProps(id)}>
+              Edit
+            </button>
+
             <span style={completed ? completedStyle :null}>
               {title}
             </span>

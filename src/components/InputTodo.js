@@ -12,7 +12,7 @@ class InputTodo extends Component {
         })
     };
 
-    // passing up to the parent
+    // passing up to the parent the newly entered value
     handleSubmit = e => {
         e.preventDefault();
         this.props.addTodoProps(this.state.title);
@@ -21,6 +21,8 @@ class InputTodo extends Component {
         });
     };
 
+    // add functionality for a clock to show specific times/ when the todo was created
+    // on completion show a line-through and a completed time.
     render() {
         return (
             <form onSubmit={this.handleSubmit} className="form-container">

@@ -12,10 +12,10 @@ const Header = () => {
     return (
         <header style={headerStyle}>
             <h1 style={{ fontSize: "25px", marginBottom: "15px" }}>
-                Simple To-do App
+                Simple To-Do App
             </h1>
             <p style={{ fontSize: "19px" }}>
-                Please add to-dos item(s) through the input field
+                Please add to-do item(s) through the input field
             </p>
         </header>
     )
