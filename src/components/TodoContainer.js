@@ -1,23 +1,38 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+
 import TodosList from './TodosList';
 import Header from './Header';
 import InputTodo from './InputTodo';
+// import EditTodo from './EditTodo';
+
 
 // need data to be saved by browser so we don't lose our todos
 
 class TodoContainer extends React.Component {
     
-    // we don't want these defaults, we want them to be dynamic or saved by browser
+    // TODO : DYNAMIC/ SAVED TODOS IN BROWSER
+    // https://www.robinwieruch.de/local-storage-react
+    // we don't want defaults
     state = {
         todos: [
             {
                 id: uuidv4(),
                 title: "Placeholder task",
-                completed: false
-            },
+                completed: false,
+                // open : false
+            }
 
-        ]
+        ],
+        open : false,
+        // value : '',
     };
 
     // enable communication between the components:
@@ -45,21 +60,6 @@ class TodoContainer extends React.Component {
             ]
         });
     };
-    // TODO: EDIT ENTRY
-    // needs to open an input window to allow for new entry
-    editTodo =(id, title) => {
-        // this.setState({})
-        const editTitle = {
-            id : id,
-            title : title
-        }
-        // needs to replace the todo
-        this.setState({
-            todos : [...this.state.todos, editTitle]
-        })
-            console.log("Edited todo -> " ,{title});
-        
-    }
 
     // add a new item with a unique ID and title passed up from
     // InputTodo.
@@ -67,12 +67,48 @@ class TodoContainer extends React.Component {
         const newTodo = {
             id: uuidv4(),
             title: title,
-            completed: false
+            completed: false,
         };
         // update the state
         this.setState({
             todos: [...this.state.todos, newTodo]
         });
+    };
+    // TODO: EDIT ENTRY
+    // on submit takes what is in the text field and replaces the title of the todo
+    editTodo = (id, title) => {
+
+        let todos = this.state.todos;
+        for(let todo of todos) {
+            if(todo.id === id) {
+                title = 'Hey liam!'
+                this.title = title
+            } 
+        }
+        this.setState({
+            todos: JSON.parse(JSON.stringify(todos)),
+            open: false
+        })
+        
+    }
+    // handle edits in the textfield of the dialog box
+    handleEdit = (value) => {
+        this.setState({ value });
+    }
+
+    handleClose = () => {
+        this.setState({ open: false });
+    };
+    // currently gets the id and title props of the todoItem we want to edit
+    // somehow need to pass that to editTodoItem
+    handleClickOpen = (id) => {
+        this.setState({ 
+            open: true
+        });
+
+        // this.setState({
+        //     tempId: id,
+        // });
     };
 
     render () {
@@ -88,8 +124,43 @@ class TodoContainer extends React.Component {
                     todos={this.state.todos} 
                     handleChangeProps={this.handleChange}
                     deleteTodoProps={this.deleteTodo}
-                    editTodoProps={this.editTodo}
+                    editTodoProps={this.handleClickOpen}
                 />
+
+                <Dialog
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Edit This To-do</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                Displays the current todo
+                            </DialogContentText>
+                            <TextField 
+                                autoFocus
+                                id="title"
+                                label="Edit your todo"
+                                type="text"
+                                // below added to handle an edit
+                                // value={this.state.value}
+                                // onChange={this.handleEdit}
+                            />
+                        </DialogContent>
+
+                        <DialogActions>
+                            <Button onClick={this.handleClose} color="primary">
+                                Cancel
+                            </Button>
+                            {/* submit click will trigger editTodo and take the new title.
+                                Currently we reach the maximum update depth if we attempt
+                                to pass anything in parenthesis
+                            */}
+                            <Button onClick={this.editTodo} color="primary">
+                                Submit
+                            </Button>
+                        </DialogActions>
+                </Dialog>
             </div>
         );
     }

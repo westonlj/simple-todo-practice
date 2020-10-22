@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import TodoContainer from './components/TodoContainer';
 
+import './iron-flex-layout.css';
+import './iron-flex-layout-classes.css';
 import './index.css';
-import "./App.css"
+import "./App.css";
 
 ReactDOM.render(
   <React.StrictMode>
