@@ -33,6 +33,8 @@ class TodoContainer extends React.Component {
         ],
         open : false,
         value : '',
+        currentId : '',
+        currentTitle : ''
     };
 
     // enable communication between the components:
@@ -76,36 +78,45 @@ class TodoContainer extends React.Component {
     };
     // TODO: EDIT ENTRY
     // on submit takes what is in the text field and replaces the title of the todo
-    editTodo = (id, title) => {
+    editTodo = () => {
+        console.log(this.state.value)
 
         let todos = this.state.todos;
         for(let todo of todos) {
-            if(todo.id === id) {
-                title = 'Hey liam!'
-                this.title = title
+            if(todo.id === this.state.currentId) {
+                todo.title = this.state.value
             } 
         }
         this.setState({
             todos: JSON.parse(JSON.stringify(todos)),
-            open: false
+            open: false,
+            value: '',
+            currentId: '',
+            currentTitle: ''
         })
         
     }
     // handle edits in the textfield of the dialog box
-    handleEdit = (value) => {
-        this.setState({ value });
+    handleEdit = (e) => {
+        this.setState({ value: e.target.value });
     }
 
     handleClose = () => {
-        this.setState({ open: false });
+        this.setState({ 
+            open: false,
+            value: ''
+        });
     };
     // currently gets the id and title props of the todoItem we want to edit
     // somehow need to pass that to editTodoItem
-    handleClickOpen = () => {
+    handleClickOpen = (id, title) => {
         this.setState({ 
-            open: true
+            open: true,
+            currentId: id,
+            currentTitle: title,
         });
 
+        // console.log(args);
         // this.setState({
         //     tempId: id,
         // });
@@ -141,10 +152,11 @@ class TodoContainer extends React.Component {
                                 autoFocus
                                 id="title"
                                 label="Edit your todo"
+                                placeholder={this.state.currentTitle}
                                 type="text"
                                 // below added to handle an edit
-                                // value={this.state.value}
-                                // onChange={this.handleEdit}
+                                value={this.state.value}
+                                onChange={this.handleEdit}
                             />
                         </DialogContent>
 

@@ -6,7 +6,10 @@ class InputTodo extends Component {
     };
 
     // make the value in input not read only
+    // e is an event
     onChange = e => {
+        // console.log(e.target, e.target.name, e);
+
         this.setState({
             [e.target.name]: e.target.value,
         })

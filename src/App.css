@@ -3,6 +3,21 @@
   margin: 0;
   padding: 0;
 }
+.login-form
+{
+  padding: 60px;
+  justify-content: center;
+  min-height: 90vh;
+}
+.button-block{
+  max-width: 320px;
+}
+.login-background
+{
+justify-content: center;
+min-height: 30vh;
+padding: 50px;
+}
 body {
   font-family: "Segoe UI", Arial sans-serif;
   line-height: 1.4;
