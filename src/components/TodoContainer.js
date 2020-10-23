@@ -32,7 +32,7 @@ class TodoContainer extends React.Component {
 
         ],
         open : false,
-        // value : '',
+        value : '',
     };
 
     // enable communication between the components:
@@ -101,7 +101,7 @@ class TodoContainer extends React.Component {
     };
     // currently gets the id and title props of the todoItem we want to edit
     // somehow need to pass that to editTodoItem
-    handleClickOpen = (id) => {
+    handleClickOpen = () => {
         this.setState({ 
             open: true
         });
@@ -126,7 +126,7 @@ class TodoContainer extends React.Component {
                     deleteTodoProps={this.deleteTodo}
                     editTodoProps={this.handleClickOpen}
                 />
-
+                {/* Dialog box for edit function */}
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -155,6 +155,8 @@ class TodoContainer extends React.Component {
                             {/* submit click will trigger editTodo and take the new title.
                                 Currently we reach the maximum update depth if we attempt
                                 to pass anything in parenthesis
+
+                                Maybe on button press trigger a new functional component?
                             */}
                             <Button onClick={this.editTodo} color="primary">
                                 Submit

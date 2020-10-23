@@ -26,6 +26,8 @@ class TodoItem extends React.Component {
             {/* TODO: EDIT ENTRY 
               When clicked we want to set an open value to true so it opens
               the dialog box and allows for editing
+
+              pass this.props.todo.id and title back up onClick
             */}
             <button className="btn-spacing" onClick={() => this.props.editTodoProps(id, title)}>
               Edit
