@@ -10,7 +10,8 @@ class LoginPage extends React.Component {
         isLoggedIn: false,
     };
     
-    handleSubmit = (event) => {
+    handleSubmit = (e) => {
+
         if ((this.state.username === 'liam@krum.io' && this.state.password === 'password')) {
             
             console.log("Logged in")
@@ -41,37 +42,33 @@ class LoginPage extends React.Component {
         if(!this.state.isloggedIn) {
             return (
                 <div className="login-background">
-                    <form 
-                        className="login-form"
-                        onSubmit={this.handleSubmit}
-                    >
-                        <div>
-                            <label>Email</label>
-                                <input 
-                                    type="email"
-                                    placeholder="Enter Email"
-                                    value={this.state.email}
-                                    name="username"
-                                    onChange={this.onChange}
-                                />
-                        </div>
-                        <div>
-                            <label>Password</label>
-                                <input 
-                                    type="password"
-                                    placeholder="Enter password"
-                                    value={this.state.password}
-                                    name="password"
-                                    onChange={this.onChange}
-                                />
-                        </div>
-                        <button 
-                            className="button-block" 
-                            type="submit"
-                            value="Submit"
-                        >Login
-                        </button>
-                    </form>
+                    <div>
+                        <label>Email</label>
+                            <input 
+                                type="email"
+                                placeholder="Enter Email"
+                                value={this.state.email}
+                                name="username"
+                                onChange={this.onChange}
+                            />
+                    </div>
+                    <div>
+                        <label>Password</label>
+                            <input 
+                                type="password"
+                                placeholder="Enter password"
+                                value={this.state.password}
+                                name="password"
+                                onChange={this.onChange}
+                            />
+                    </div>
+                    <button 
+                        className="button-block" 
+                        type="submit"
+                        value="Submit"
+                        onClick={this.handleSubmit}
+                    >Login
+                    </button>
                 </div>
             )
         } else {
