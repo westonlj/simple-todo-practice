@@ -22,22 +22,14 @@ class TodoContainer extends React.Component {
     // https://www.robinwieruch.de/local-storage-react
     // we don't want defaults
     state = {
-        todos: [
-            {
-                id: uuidv4(),
-                title: "Placeholder task",
-                completed: false,
-                // open : false
-            }
+        todos: [],
 
-        ],
         open : false,
         value : '',
         currentId : '',
         currentTitle : ''
     };
-
-    // enable communication between the components:
+    // TODO: update the localStorage value of "completed"
     // receiving id and allowing for checkbox to be checked
     handleChange = (id) => {
         this.setState({
@@ -49,10 +41,12 @@ class TodoContainer extends React.Component {
             })
         });
     };
-    // With the filter() method, we are saying that for each
-    // of the todos data that we are looping through, we
-    // want to retain the once whose id is not equal to the id passed in.
+    // uses ID to delete from array
     deleteTodo = (id) => {
+        // create a clone of the array and apply splice to it
+        // applying splice is not good for states because it mutates arrays
+        let todosClone = JSON.parse(localStorage.getItem('todos'));
+        todosClone.splice(id, 1)
         this.setState({
             // filter() create a new array
             todos : [
@@ -61,32 +55,53 @@ class TodoContainer extends React.Component {
                 })
             ]
         });
+        // update localStorage
+        localStorage.setItem('todos', JSON.stringify(todosClone))
     };
 
     // add a new item with a unique ID and title passed up from
     // InputTodo.
+    // Also add the new item to localStorage
     addTodoItem = title => {
         const newTodo = {
             id: uuidv4(),
             title: title,
             completed: false,
         };
+        // check if there a todos key in localStorage exists
+        // if null then create one by adding the newTodo object above
+        // if it does exist: retrieve from storage and update
+        if(localStorage.getItem('todos') === null) {
+            const todos = []
+            todos.push(newTodo);
+            localStorage.setItem("todos", JSON.stringify(todos));
+        } else {
+            const todos = JSON.parse(localStorage.getItem('todos'))
+            todos.push(newTodo);
+            localStorage.setItem("todos", JSON.stringify(todos))
+        }
+
         // update the state
         this.setState({
-            todos: [...this.state.todos, newTodo]
+            // todos: [...this.state.todos, newTodo]
+            todos:JSON.parse(localStorage.getItem('todos'))
         });
     };
-    // TODO: EDIT ENTRY
-    // on submit takes what is in the text field and replaces the title of the todo
+    // On submit takes what is in the text field and replaces the title
+    // of the todo. 
+    // TODO: Update the localStorage title
     editTodo = () => {
-        console.log(this.state.value)
+        // const todos = JSON.parse(localStorage.getItem('todos'))
 
         let todos = this.state.todos;
         for(let todo of todos) {
             if(todo.id === this.state.currentId) {
                 todo.title = this.state.value
+                // update localStorage
+                localStorage.setItem("todos", JSON.stringify(todos))
             } 
         }
+
         this.setState({
             todos: JSON.parse(JSON.stringify(todos)),
             open: false,
@@ -100,15 +115,14 @@ class TodoContainer extends React.Component {
     handleEdit = (e) => {
         this.setState({ value: e.target.value });
     }
-
+    // Handles dialog box cancel
     handleClose = () => {
         this.setState({ 
             open: false,
             value: ''
         });
     };
-    // currently gets the id and title props of the todoItem we want to edit
-    // somehow need to pass that to editTodoItem
+    // Opens dialog box for edits
     handleClickOpen = (id, title) => {
         this.setState({ 
             open: true,
@@ -126,6 +140,9 @@ class TodoContainer extends React.Component {
         return (
             <div className="container">
                 <Header />
+
+                {/* Display the saved todos immediately */}
+
                 <InputTodo addTodoProps={this.addTodoItem} />
                 {/* Passing the todos data to Todoslist 
                     and passing handleChangeProps to allow for the changing state

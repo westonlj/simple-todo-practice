@@ -2,9 +2,18 @@ import React from 'react';
 
 import TodoContainer from './components/TodoContainer';
 
+// TODO: 
+// add styling similar to the todo,
+// add user profile that is stored in localStorage
+// add ability to make new account and save that to loginData
+
 class LoginPage extends React.Component {
 
     state = {
+        loginData: [
+            {username: 'liam@krum.io', password: 'password'}
+        ],
+
         username: '',
         password: '',
         isLoggedIn: false,
@@ -31,16 +40,9 @@ class LoginPage extends React.Component {
         })
     }
 
-    // handleChange(event) {
-    //     this.setState({ 
-    //         username: event.state.username,
-    //         password: event.state.password
-    //     });
-    // }
-
     render() {
-        if(!this.state.isloggedIn) {
-            return (
+        return (
+            !this.state.isLoggedIn ?
                 <div className="login-background">
                     <div>
                         <label>Email</label>
@@ -70,14 +72,9 @@ class LoginPage extends React.Component {
                     >Login
                     </button>
                 </div>
-            )
-        } else {
-            console.log("I am logged in")
-            return (
-                <TodoContainer />
-            )
-        }
+            //isLoggedIn is true
+            : <TodoContainer />
+        )
     }
 }
-
 export default LoginPage
