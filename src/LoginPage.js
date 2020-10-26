@@ -1,18 +1,17 @@
 import React from 'react';
-
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import TodoContainer from './components/TodoContainer';
 
 // TODO: 
 // add styling similar to the todo,
-// add user profile that is stored in localStorage
+// add user profile that is stored in sessionStorage
 // add ability to make new account and save that to loginData
 
 class LoginPage extends React.Component {
 
     state = {
-        loginData: [
-            {username: 'liam@krum.io', password: 'password'}
-        ],
+        loginData: {username: 'liam@krum.io', password: 'password'},
 
         username: '',
         password: '',
@@ -20,10 +19,12 @@ class LoginPage extends React.Component {
     };
     
     handleSubmit = (e) => {
+        // stops the form submittion from just reloading page
+        // because if the event does not get explicitly handled its default
+        // action should not trigger
+        e.preventDefault();
 
         if ((this.state.username === 'liam@krum.io' && this.state.password === 'password')) {
-            
-            console.log("Logged in")
 
             this.setState({
                 isLoggedIn: true
@@ -34,44 +35,67 @@ class LoginPage extends React.Component {
     }
 
     onChange = (event) => {
-        
+
         this.setState({
             [event.target.name] : event.target.value
         })
+
+        //sessionStorage.setItem
     }
 
     render() {
         return (
             !this.state.isLoggedIn ?
-                <div className="login-background">
-                    <div>
-                        <label>Email</label>
-                            <input 
-                                type="email"
-                                placeholder="Enter Email"
-                                value={this.state.email}
-                                name="username"
-                                onChange={this.onChange}
-                            />
+                <form onSubmit={this.handleSubmit} className="layout-main-container">
+                    <div className="login-container">
+                        <div className="layout-horizontal">
+                            <img 
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSd2DSWxHuHQGJMXhxnQLkvJpY1yOFD-rEsLw&usqp=CAU"
+                                className="app-logo"
+                                sizing="contain"
+                                alt="Todo Logo"
+                                />
+                        </div>
+                        <div className="layout-horizontal">
+                            <span className="app-title">Welcome, please Login</span>
+                        </div>
+                        {/* Input container */}
+                        <div className="login-input-container">
+                            <div className="layout-horizontal">
+                                <TextField 
+                                    type="email"
+                                    label="Username"
+                                    placeholder="Enter Email"
+                                    value={this.state.email}
+                                    name="username"
+                                    onChange={this.onChange}
+                                />
+                            </div>
+                            <div className="layout-horizontal">
+                                <TextField
+                                    className=""
+                                    type="password"
+                                    label="Password"
+                                    placeholder="Enter password"
+                                    value={this.state.password}
+                                    name="password"
+                                    onChange={this.onChange}
+                                />
+                            </div>
+                        </div>
+                        <div className="layout-horizontal">
+                            <Button
+                            className="input-submit"
+                            fullWidth variant="contained"
+                            type="submit"
+                            onKeyDown={this.handleSubmit}
+                            color="primary"
+                            >
+                            Login
+                            </Button>
+                        </div>
                     </div>
-                    <div>
-                        <label>Password</label>
-                            <input 
-                                type="password"
-                                placeholder="Enter password"
-                                value={this.state.password}
-                                name="password"
-                                onChange={this.onChange}
-                            />
-                    </div>
-                    <button 
-                        className="button-block" 
-                        type="submit"
-                        value="Submit"
-                        onClick={this.handleSubmit}
-                    >Login
-                    </button>
-                </div>
+                </form>
             //isLoggedIn is true
             : <TodoContainer />
         )
