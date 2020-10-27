@@ -110,10 +110,10 @@ class LoginPage extends React.Component {
                         </div>
                     </form>
                 //isLoggedIn is true
-                : <TodoContainer />
+                : <TodoContainer/>
             )
         } else {
-            return(<TodoContainer />)
+            return(<TodoContainer/>)
         }
     }
 }

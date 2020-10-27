@@ -140,7 +140,7 @@ class TodoContainer extends React.Component {
     render () {
         return (
             <div className="container">
-                <Header />
+                <Header/>
 
                 {/* Display the saved todos immediately */}
 

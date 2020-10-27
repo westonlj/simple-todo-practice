@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@material-ui/core/Button'
 
 // using ES6 arrow function same as:
     // function Header() {}
@@ -10,14 +11,22 @@ const Header = () => {
         textAlign: "center"
     }
 
+    function handleLogout(){
+        sessionStorage.clear();
+        window.location.reload();
+    }
+
     return (
         <header style={headerStyle}>
             <h1 style={{ fontSize: "25px", marginBottom: "15px", }}>
                 Simple To-Do App
             </h1>
-            <p style={{ fontSize: "19px" }}>
-                Please add to-do item(s) through the input field
-            </p>
+            {/* add a logout button that changes isLoggedIn to false
+                AND clear the sessionStorage
+             */}
+            <Button onClick={handleLogout}> 
+            Logout
+            </Button>
         </header>
     )
 }
