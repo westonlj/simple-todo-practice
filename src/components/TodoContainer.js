@@ -7,11 +7,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import Pagination from '@material-ui/lab/Pagination';
 
 import TodosList from './TodosList';
 import Header from './Header';
 import InputTodo from './InputTodo';
-// import EditTodo from './EditTodo';
 
 
 // need data to be saved by browser so we don't lose our todos
@@ -23,14 +23,13 @@ class TodoContainer extends React.Component {
     // we don't want defaults
     state = {
         todos: [],
-
+        // JSON.parse(localStorage.getItem("todos"))
         open : false,
         value : '',
         currentId : '',
         currentTitle : ''
     };
-    // TODO: update the localStorage value of "completed"
-    // receiving id and allowing for checkbox to be checked
+    // Usea passed in id to check a checkbox
     handleChange = (id) => {
         this.setState({
             todos: this.state.todos.map(todo => {
@@ -40,9 +39,12 @@ class TodoContainer extends React.Component {
                 return todo;
             })
         });
+        let todos = this.state.todos;
+        localStorage.setItem("todos", JSON.stringify(todos))
     };
-    // uses ID to delete from array
+    // Uses id to delete from array of todos and update the localStorage
     deleteTodo = (id) => {
+        console.log("deleting todo: " + id)
         // create a clone of the array and apply splice to it
         // applying splice is not good for states because it mutates arrays
         let todosClone = JSON.parse(localStorage.getItem('todos'));
@@ -59,16 +61,15 @@ class TodoContainer extends React.Component {
         localStorage.setItem('todos', JSON.stringify(todosClone))
     };
 
-    // add a new item with a unique ID and title passed up from
+    // Add a new item with a unique id and title passed up from
     // InputTodo.
-    // Also add the new item to localStorage
     addTodoItem = title => {
         const newTodo = {
             id: uuidv4(),
             title: title,
             completed: false,
         };
-        // check if there a todos key in localStorage exists
+        // check if a todos key in localStorage exists
         // if null then create one by adding the newTodo object above
         // if it does exist: retrieve from storage and update
         if(localStorage.getItem('todos') === null) {
@@ -192,6 +193,11 @@ class TodoContainer extends React.Component {
                             </Button>
                         </DialogActions>
                 </Dialog>
+            
+                <div className="pagination-container">
+                    {/* <PaginationComponent /> */}
+                    <Pagination size='medium'/>
+                </div>
             </div>
         );
     }

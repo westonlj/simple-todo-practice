@@ -19,16 +19,13 @@ class TodoItem extends React.Component {
               checked={ completed }
               onChange={() => this.props.handleChangeProps(id)}
             />
-            <button onClick={() => this.props.deleteTodoProps(id)}>
+
+            {/* display a date and time that is transparent for CompletedDate and CreatedDate */}
+
+            <button className="btn-spacing" onClick={() => this.props.deleteTodoProps(id)}>
               Delete
             </button>
-            
-            {/* TODO: EDIT ENTRY 
-              When clicked we want to set an open value to true so it opens
-              the dialog box and allows for editing
 
-              pass this.props.todo.id and title back up onClick
-            */}
             <button className="btn-spacing" onClick={() => this.props.editTodoProps(id, title)}>
               Edit
             </button>

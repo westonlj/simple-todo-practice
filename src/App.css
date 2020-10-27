@@ -79,6 +79,7 @@ body {
   max-width: 700px;
   margin: 0 auto;
   padding: 0 10px;
+  padding-bottom: 60px;
 }
 .form-container {
   display: flex;
@@ -111,6 +112,14 @@ body {
 }
 .todo-item input {
   margin-right: 15px;
+}
+.pagination-container{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  bottom: 100px;
+  right: 0;
 }
 .todo-item button {
   background: #d35e0f;

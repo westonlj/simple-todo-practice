@@ -18,10 +18,15 @@ class InputTodo extends Component {
     // passing up to the parent the newly entered value
     handleSubmit = e => {
         e.preventDefault();
-        this.props.addTodoProps(this.state.title);
-        this.setState({
-            title: ""
-        });
+        
+        if(this.state.title === "") {
+            alert("Cannot enter an empty todo")
+        } else {
+            this.props.addTodoProps(this.state.title);
+            this.setState({
+                title: ""
+            });
+        }
     };
 
     // add functionality for a clock to show specific times/ when the todo was created
@@ -37,7 +42,11 @@ class InputTodo extends Component {
                     name="title"
                     onChange={this.onChange}
                 />
-                <input type="submit" className="input-submit" value="Submit" />
+                <input 
+                    type="submit" 
+                    className="input-submit" 
+                    value="Submit"
+                />
             </form>
         )
     }
