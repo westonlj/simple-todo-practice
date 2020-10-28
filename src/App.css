@@ -113,6 +113,11 @@ body {
 .todo-item input {
   margin-right: 15px;
 }
+.logout-button {
+  float:right;
+  border: 1px solid black;
+}
+
 .pagination-container{
   display: flex;
   justify-content: center;
@@ -129,4 +134,25 @@ body {
   cursor: pointer;
   float: right;
   outline: none;
+}
+.search-box {
+  border-radius: 3px;
+  background-color: #f2f2f2;
+  background: #FBFBFB;
+    border: 1px solid #EAEAEA;
+    border-radius: 3px;
+    height: 27px;
+    margin-top: 8px;
+    font-size: 14px;
+  max-width: 200px;
+}
+.search-input {
+  box-sizing: border-box;
+  background-color: transparent;
+  border: 0px;
+  padding: 5px 0px;
+  font-size: 1em;
+  position: relative;
+  outline: 0px;
+  width: 75%;
 }

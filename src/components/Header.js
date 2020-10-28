@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 const Header = () => {
 
     const headerStyle = {
-        padding: "20px 0",
+        padding: "25px 0",
         lineHeight: "2em",
         textAlign: "center"
     }
@@ -20,9 +20,12 @@ const Header = () => {
     return (
         <header style={headerStyle}>
             <h1 style={{ fontSize: "25px", marginBottom: "15px", }}>
-                Simple To-Do App
+                AAAAHHHHH!! Real To-Do List
             </h1>
-            <Button onClick={handleLogout}> 
+            <Button 
+                onClick={handleLogout}
+                className="logout-button"
+            > 
             Logout
             </Button>
         </header>

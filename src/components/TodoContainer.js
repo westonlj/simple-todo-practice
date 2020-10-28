@@ -13,9 +13,18 @@ import Pagination from '@material-ui/lab/Pagination';
 import TodosList from './TodosList';
 import Header from './Header';
 import InputTodo from './InputTodo';
+import SearchBar from './SearchBar';
 
 
-// need data to be saved by browser so we don't lose our todos
+// NOTES FOR FUTURE LIAM //
+// This application is an extension of a tutorial you did in 2020.
+// The original features included: add todo, check todo, delete todo.
+// You want to add: Edit, a loginPage, logout button, dialog boxes, pagination,
+// search bar, styling for mobile, date and time of creation/completion,
+// and storage capabilities (localStorage and sessionStorage)
+// limitations with the application: how it was originally designed did not plan for your
+// additions. How some items are passed around and how most components are class based 
+// caused some messy code and value to be passed around at random.
 
 class TodoContainer extends React.Component {
     
@@ -57,7 +66,7 @@ class TodoContainer extends React.Component {
         // applying splice is not good for states because it mutates arrays
         let todosClone = JSON.parse(localStorage.getItem('todos'));
         todosClone.splice(id, 1)
-
+        localStorage.setItem('todos', JSON.stringify(todosClone))
         // Error in this function
         this.setState({
             // filter() creates a new array
@@ -66,8 +75,9 @@ class TodoContainer extends React.Component {
                     return todo.id !== id;
                 })
             ]
+            // todos:JSON.parse(localStorage.getItem('todos'))
         });
-        localStorage.setItem('todos', JSON.stringify(todosClone))
+        // localStorage.setItem('todos', JSON.stringify(todosClone))
         console.log(this.state.todos)
     };
 
@@ -100,9 +110,7 @@ class TodoContainer extends React.Component {
     };
     // On submit takes what is in the text field and replaces the title
     // of the todo. 
-    // TODO: Update the localStorage title
     editTodo = () => {
-        // const todos = JSON.parse(localStorage.getItem('todos'))
 
         let todos = this.state.todos;
         for(let todo of todos) {
@@ -140,12 +148,11 @@ class TodoContainer extends React.Component {
             currentId: id,
             currentTitle: title,
         });
-
-        // console.log(args);
-        // this.setState({
-        //     tempId: id,
-        // });
     };
+    // Highlights the todo
+    onSearch = (todo) => {
+        // search through the list of todos for one with an exact title match
+    }
 
     render () {
         const itemsPerPage = 10;
@@ -153,14 +160,17 @@ class TodoContainer extends React.Component {
         return (
             <div className="container">
                 <Header/>
-
+                <div>
+                    <SearchBar 
+                        searchBoxName={"TodoSearch"}
+                        onSearchTermChange={this.onSearch}    
+                    />
+                </div>
+                
                 {/* Display the saved todos immediately */}
 
                 <InputTodo addTodoProps={this.addTodoItem} />
-                {/* Passing the todos data to Todoslist 
-                    and passing handleChangeProps to allow for the changing state
-                    - updates the list after/ if a new item is added
-                */}
+
                 <TodosList 
                     todos={this.state.todos} 
                     handleChangeProps={this.handleChange}
@@ -205,7 +215,7 @@ class TodoContainer extends React.Component {
                             </Button>
                         </DialogActions>
                 </Dialog>
-                
+                {/* Pagination */}
                 <Box component="span">
                     <Pagination 
                         count={numPages} 
