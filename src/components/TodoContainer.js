@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import Box from '@material-ui/core/Box';
 import Pagination from '@material-ui/lab/Pagination';
 
 import TodosList from './TodosList';
@@ -27,8 +28,11 @@ class TodoContainer extends React.Component {
         open : false,
         value : '',
         currentId : '',
-        currentTitle : ''
+        currentTitle : '',
+        // pagination props
+        currentPage : 1,
     };
+
     // Usea passed in id to check a checkbox
     handleChange = (id) => {
         this.setState({
@@ -42,23 +46,29 @@ class TodoContainer extends React.Component {
         let todos = this.state.todos;
         localStorage.setItem("todos", JSON.stringify(todos))
     };
+    // ERROR IN THIS FUNCTION
     // Uses id to delete from array of todos and update the localStorage
+    // BUG:
+    // Currently delete doesn't seem to work. LocalStorage doesn't delete the item
+    // sometimes this.setState doesn't remove it either
     deleteTodo = (id) => {
         console.log("deleting todo: " + id)
         // create a clone of the array and apply splice to it
         // applying splice is not good for states because it mutates arrays
         let todosClone = JSON.parse(localStorage.getItem('todos'));
         todosClone.splice(id, 1)
+
+        // Error in this function
         this.setState({
-            // filter() create a new array
+            // filter() creates a new array
             todos : [
                 ...this.state.todos.filter(todo => {
                     return todo.id !== id;
                 })
             ]
         });
-        // update localStorage
         localStorage.setItem('todos', JSON.stringify(todosClone))
+        console.log(this.state.todos)
     };
 
     // Add a new item with a unique id and title passed up from
@@ -138,6 +148,8 @@ class TodoContainer extends React.Component {
     };
 
     render () {
+        const itemsPerPage = 10;
+        const numPages = Math.ceil(this.state.todos.length/itemsPerPage);
         return (
             <div className="container">
                 <Header/>
@@ -193,14 +205,29 @@ class TodoContainer extends React.Component {
                             </Button>
                         </DialogActions>
                 </Dialog>
-            
-                <div className="pagination-container">
-                    {/* <PaginationComponent /> */}
-                    <Pagination size='medium'/>
-                </div>
+                
+                <Box component="span">
+                    <Pagination 
+                        count={numPages} 
+                        size='medium'
+                        className="pagination-container"
+                        defaultPage={1}
+                        page={this.state.currentPage}
+                        // onChange={handlePageChange} sets value of page
+                    />
+                </Box>
             </div>
         );
     }
 }
+
+/*
+    NOTES FOR PAGINATION:
+    for pages we need to take the total number of entries in the array:
+
+    todos.slice((page-1) * itemsPerPage, page * itemsPerPage)
+    todos.map???
+*/
+
 
 export default TodoContainer

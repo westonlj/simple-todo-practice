@@ -41,6 +41,7 @@ class InputTodo extends Component {
                     value={this.state.title}
                     name="title"
                     onChange={this.onChange}
+                    maxLength="100"
                 />
                 <input 
                     type="submit" 

@@ -118,7 +118,7 @@ body {
   justify-content: center;
   position: absolute;
   left: 0;
-  bottom: 100px;
+  bottom: 60px;
   right: 0;
 }
 .todo-item button {

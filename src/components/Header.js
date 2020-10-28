@@ -16,14 +16,12 @@ const Header = () => {
         window.location.reload();
     }
 
+    // edit the below return to be a top bar with the header and logout button
     return (
         <header style={headerStyle}>
             <h1 style={{ fontSize: "25px", marginBottom: "15px", }}>
                 Simple To-Do App
             </h1>
-            {/* add a logout button that changes isLoggedIn to false
-                AND clear the sessionStorage
-             */}
             <Button onClick={handleLogout}> 
             Logout
             </Button>

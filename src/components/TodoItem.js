@@ -20,7 +20,9 @@ class TodoItem extends React.Component {
               onChange={() => this.props.handleChangeProps(id)}
             />
 
-            {/* display a date and time that is transparent for CompletedDate and CreatedDate */}
+            {/* display a date and time that is transparent for CompletedDate and CreatedDate
+              Use date objects that just saves current date to the object            
+            */}
 
             <button className="btn-spacing" onClick={() => this.props.deleteTodoProps(id)}>
               Delete
