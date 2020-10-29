@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Pagination from '@material-ui/lab/Pagination';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import TodosList from './TodosList';
 import Header from './Header';
@@ -150,8 +151,17 @@ class TodoContainer extends React.Component {
         });
     };
     // Highlights the todo
-    onSearch = (todo) => {
+    onSearch = (searchTodo) => {
         // search through the list of todos for one with an exact title match
+        let todos = this.state.todos;
+        for(let todo of todos) {
+            if(todo.title === searchTodo.todo) {
+                // highlight object
+                return (
+                    <mark>{todo.title}</mark>
+                )
+            }
+        }
     }
 
     render () {
@@ -160,7 +170,8 @@ class TodoContainer extends React.Component {
         return (
             <div className="container">
                 <Header/>
-                <div>
+
+                <div className="form-container">
                     <SearchBar 
                         searchBoxName={"TodoSearch"}
                         onSearchTermChange={this.onSearch}    

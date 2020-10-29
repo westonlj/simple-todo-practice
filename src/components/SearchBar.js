@@ -18,7 +18,7 @@ class SearchBar extends React.Component {
         const name = this.props.searchBoxName || undefined
         return (
             <div className="search-box">
-                <input name={name} Y
+                <input name={name}
                 className="search-input" id="search" type="text" placeholder="Search" value={this.state.todo}
                 onChange={event=>this.onInputChange(event.target.value)} onKeyPress={this.props.onKeyPress|| null}/>
             </div>

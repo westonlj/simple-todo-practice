@@ -144,15 +144,17 @@ body {
     height: 27px;
     margin-top: 8px;
     font-size: 14px;
-  max-width: 200px;
+  /* max-width: 200px; */
+  /* width: 100%; */
+  display: flex;
 }
 .search-input {
   box-sizing: border-box;
   background-color: transparent;
   border: 0px;
-  padding: 5px 0px;
   font-size: 1em;
   position: relative;
   outline: 0px;
   width: 75%;
+  padding: 12px 15px;
 }
