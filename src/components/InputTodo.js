@@ -37,7 +37,7 @@ class InputTodo extends Component {
                 <input 
                     type="text"
                     className="input-text"
-                    placeholder="Add todo..." 
+                    placeholder="Add to-do..." 
                     value={this.state.title}
                     name="title"
                     onChange={this.onChange}

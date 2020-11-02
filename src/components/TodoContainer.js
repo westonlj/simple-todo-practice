@@ -8,15 +8,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import Pagination from '@material-ui/lab/Pagination';
-import Tooltip from '@material-ui/core/Tooltip';
+// import Tooltip from '@material-ui/core/Tooltip';
 
 import TodosList from './TodosList';
 import Header from './Header';
 import InputTodo from './InputTodo';
 import SearchBar from './SearchBar';
-
-
+import PaginationComp from './PaginationComp';
 // NOTES FOR FUTURE LIAM //
 // This application is an extension of a tutorial you did in 2020.
 // The original features included: add todo, check todo, delete todo.
@@ -28,19 +26,27 @@ import SearchBar from './SearchBar';
 // caused some messy code and value to be passed around at random.
 
 class TodoContainer extends React.Component {
-    
-    // TODO : DYNAMIC/ SAVED TODOS IN BROWSER
-    // https://www.robinwieruch.de/local-storage-react
-    // we don't want defaults
+    // executed once on page load
+    // constructor(props, context) {
+    //     super(props, context);
+    //     if(localStorage.getItem('todos'))
+    //         this.state.todos = JSON.parse(localStorage.getItem('todos'));
+    // }
+
+    // lifeCycle function
+    componentDidMount() {
+        if(localStorage.getItem('todos'))
+            this.setState ({
+                todos : JSON.parse(localStorage.getItem('todos'))
+            })
+    }
+
     state = {
         todos: [],
-        // JSON.parse(localStorage.getItem("todos"))
         open : false,
         value : '',
         currentId : '',
         currentTitle : '',
-        // pagination props
-        currentPage : 1,
     };
 
     // Usea passed in id to check a checkbox
@@ -62,7 +68,7 @@ class TodoContainer extends React.Component {
     // Currently delete doesn't seem to work. LocalStorage doesn't delete the item
     // sometimes this.setState doesn't remove it either
     deleteTodo = (id) => {
-        console.log("deleting todo: " + id)
+        
         // create a clone of the array and apply splice to it
         // applying splice is not good for states because it mutates arrays
         let todosClone = JSON.parse(localStorage.getItem('todos'));
@@ -79,7 +85,6 @@ class TodoContainer extends React.Component {
             // todos:JSON.parse(localStorage.getItem('todos'))
         });
         // localStorage.setItem('todos', JSON.stringify(todosClone))
-        console.log(this.state.todos)
     };
 
     // Add a new item with a unique id and title passed up from
@@ -150,23 +155,28 @@ class TodoContainer extends React.Component {
             currentTitle: title,
         });
     };
-    // Highlights the todo
+    // Search through list of todos with an exact title match
     onSearch = (searchTodo) => {
         // search through the list of todos for one with an exact title match
-        let todos = this.state.todos;
+        this.state.searchTerm = searchTodo;
+        this.setState({ searchTerm: this.state.searchTerm})
+    }
+    // passes in todos list and the search object and populates an array with matches
+    handleSearch = (todos, search) => {
+        
+        if(!search) return todos;
+        if(!search.search) return todos;
+        let arr = [];
         for(let todo of todos) {
-            if(todo.title === searchTodo.todo) {
-                // highlight object
-                return (
-                    <mark>{todo.title}</mark>
-                )
+            if(todo.title.indexOf(search.search) >= 0) {
+                arr.push(todo)
             }
         }
+        return arr
     }
 
     render () {
-        const itemsPerPage = 10;
-        const numPages = Math.ceil(this.state.todos.length/itemsPerPage);
+        
         return (
             <div className="container">
                 <Header/>
@@ -183,7 +193,7 @@ class TodoContainer extends React.Component {
                 <InputTodo addTodoProps={this.addTodoItem} />
 
                 <TodosList 
-                    todos={this.state.todos} 
+                    todos={this.handleSearch(this.state.todos, this.state.searchTerm)} 
                     handleChangeProps={this.handleChange}
                     deleteTodoProps={this.deleteTodo}
                     editTodoProps={this.handleClickOpen}
@@ -228,14 +238,7 @@ class TodoContainer extends React.Component {
                 </Dialog>
                 {/* Pagination */}
                 <Box component="span">
-                    <Pagination 
-                        count={numPages} 
-                        size='medium'
-                        className="pagination-container"
-                        defaultPage={1}
-                        page={this.state.currentPage}
-                        // onChange={handlePageChange} sets value of page
-                    />
+                    <PaginationComp todos={this.state.todos}/>
                 </Box>
             </div>
         );

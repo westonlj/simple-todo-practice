@@ -4,13 +4,13 @@ import React from 'react';
 class SearchBar extends React.Component {
     constructor(props){
         super(props);
-        this.state={todo:''};
+        this.state={search:''};
       }
-      onInputChange(todo){
-        const name = this.props.searchBoxName || undefined
-        this.setState({todo});
+      onInputChange(search){
+        //const name = this.props.searchBoxName || undefined
+        this.setState({search});
         if(this.props.onSearchTermChange){
-          this.props.onSearchTermChange({name,todo})
+          this.props.onSearchTermChange({search})
         }
       }
 

@@ -70,7 +70,7 @@ class LoginPage extends React.Component {
                                     />
                             </div>
                             <div className="layout-horizontal">
-                                <span className="app-title">Welcome, please Login</span>
+                                <span className="app-title">Welcome, please login</span>
                             </div>
                             {/* Input container */}
                             <div className="login-input-container">
