@@ -105,6 +105,9 @@ body {
   width: 20%;
   outline: none;
 }
+.todo-list {
+  height: 600px;
+}
 .todo-item {
   list-style-type: none;
   padding: 17px 0px;

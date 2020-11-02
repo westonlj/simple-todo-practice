@@ -36,6 +36,8 @@ class TodoContainer extends React.Component {
     // lifeCycle function
     componentDidMount() {
         if(localStorage.getItem('todos'))
+
+            // this.state.todos = this.pageChange(1)
             this.setState ({
                 todos : JSON.parse(localStorage.getItem('todos'))
             })
@@ -174,6 +176,27 @@ class TodoContainer extends React.Component {
         }
         return arr
     }
+    // page change handler:
+    // on change display up to five items based on what page is current
+    pageChange = (page) => {
+        // itemsPerPage determines number of todos displayed on each page
+        // !!!!! itemsPerPage must also be changed in PaginationComp line 17 !!!!!
+        // find a way to pass this efficiently 
+        const itemsPerPage = 3;
+        let arr = [];
+
+        if(page.newPage === 1) {
+            arr.push(this.state.todos.slice(0, itemsPerPage));
+        } 
+        else {
+            arr.push(this.state.todos.slice((page.newPage - 1) * itemsPerPage, page.newPage * itemsPerPage));
+        }
+
+        return arr;
+        // localStorage.setItem("todos", JSON.stringify(arr))
+        
+        
+    }
 
     render () {
         
@@ -236,9 +259,13 @@ class TodoContainer extends React.Component {
                             </Button>
                         </DialogActions>
                 </Dialog>
+                
                 {/* Pagination */}
                 <Box component="span">
-                    <PaginationComp todos={this.state.todos}/>
+                    <PaginationComp 
+                        todos={this.state.todos} 
+                        handlePageChange={this.pageChange}
+                    />
                 </Box>
             </div>
         );
