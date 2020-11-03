@@ -1,6 +1,7 @@
 import React from 'react';
 
-
+// component that handles the change/ writing of text in the search bar
+// and returns a search item to be used as a filter for the array
 class SearchBar extends React.Component {
     constructor(props){
         super(props);

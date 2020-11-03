@@ -3,6 +3,8 @@ import Button from '@material-ui/core/Button'
 
 // using ES6 arrow function same as:
     // function Header() {}
+
+// is a functional comp because it  doesn't use any states or props
 const Header = () => {
 
     const headerStyle = {

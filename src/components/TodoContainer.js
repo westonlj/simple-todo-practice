@@ -44,9 +44,9 @@ class TodoContainer extends React.Component {
     }
 
     state = {
-        todos: [],
+        todos : [{id : '', title : '', completed : false}],
         open : false,
-        value : '',
+        editValue : '',
         currentId : '',
         currentTitle : '',
         currentPage : 1,
@@ -54,7 +54,7 @@ class TodoContainer extends React.Component {
         numPages : 1
     };
 
-    // Usea passed in id to check a checkbox
+    // handle the checkbox completion being marked
     handleChange = (id) => {
         this.setState({
             todos: this.state.todos.map(todo => {
@@ -149,7 +149,7 @@ class TodoContainer extends React.Component {
     handleClose = () => {
         this.setState({ 
             open: false,
-            value: ''
+            editValue: ''
         });
     };
     // Opens dialog box for edits
@@ -163,6 +163,7 @@ class TodoContainer extends React.Component {
     // Search through list of todos with an exact title match
     onSearch = (searchTodo) => {
         // search through the list of todos for one with an exact title match
+        // eslint-disable-next-line
         this.state.searchTerm = searchTodo;
         this.setState({ searchTerm: this.state.searchTerm})
     }
@@ -172,7 +173,7 @@ class TodoContainer extends React.Component {
         if(!search) 
             return todos.slice((page_number - 1) * this.state.itemsPerPage,
             page_number * this.state.itemsPerPage);
-        if(!search.search) 
+        if(!search.search)
             return todos.slice((page_number - 1) * this.state.itemsPerPage,
             page_number * this.state.itemsPerPage);
         let arr = [];
@@ -182,6 +183,7 @@ class TodoContainer extends React.Component {
             }
         }
 
+        // use local storage or session storage to save arr to be accessed by pagination?
         return arr.slice((page_number - 1) * this.state.itemsPerPage,
         page_number * this.state.itemsPerPage);
 
@@ -191,10 +193,10 @@ class TodoContainer extends React.Component {
     pageChange = (page) => {
         this.setState({ currentPage : page.newPage })
     }
-    // change the size of the array when necessary
-    calcNumPages = (arr) => {
-        this.setState({ numPages : Math.ceil(arr.length/this.state.itemsPerPage) })
-    }
+    // change the total number of pages
+    // calcNumPages = (arr) => {
+    //     this.setState({ numPages : Math.ceil(arr.length/this.state.itemsPerPage) })
+    // }
 
     render () {
         
@@ -205,7 +207,7 @@ class TodoContainer extends React.Component {
                 <div className="form-container">
                     <SearchBar 
                         searchBoxName={"TodoSearch"}
-                        onSearchTermChange={this.onSearch}    
+                        onSearchTermChange={this.onSearch}
                     />
                 </div>
                 
@@ -213,7 +215,7 @@ class TodoContainer extends React.Component {
 
                 <InputTodo addTodoProps={this.addTodoItem} />
 
-                <TodosList 
+                <TodosList
                     todos={this.handleSearch(this.state.todos, this.state.searchTerm, this.state.currentPage)} 
                     handleChangeProps={this.handleChange}
                     deleteTodoProps={this.deleteTodo}
@@ -233,10 +235,8 @@ class TodoContainer extends React.Component {
                             <TextField 
                                 autoFocus
                                 id="title"
-                                label="Edit your todo"
                                 placeholder={this.state.currentTitle}
                                 type="text"
-                                // below added to handle an edit
                                 value={this.state.value}
                                 onChange={this.handleEdit}
                             />
@@ -246,12 +246,7 @@ class TodoContainer extends React.Component {
                             <Button onClick={this.handleClose} color="primary">
                                 Cancel
                             </Button>
-                            {/* submit click will trigger editTodo and take the new title.
-                                Currently we reach the maximum update depth if we attempt
-                                to pass anything in parenthesis
 
-                                Maybe on button press trigger a new functional component?
-                            */}
                             <Button onClick={this.editTodo} color="primary">
                                 Submit
                             </Button>

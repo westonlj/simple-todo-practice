@@ -24,7 +24,6 @@ class PaginationComp extends React.Component {
             />
         )
     }
-    
 }
  // filterArray = (props) => {
     //     const itemsPerPage = this.state;

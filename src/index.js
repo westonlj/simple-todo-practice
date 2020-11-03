@@ -12,7 +12,6 @@ import "./App.css";
 ReactDOM.render(
   <React.StrictMode>
     <LoginPage />
-      {/* <TodoContainer /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
