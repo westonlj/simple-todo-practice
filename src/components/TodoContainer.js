@@ -49,6 +49,9 @@ class TodoContainer extends React.Component {
         value : '',
         currentId : '',
         currentTitle : '',
+        currentPage : 1,
+        itemsPerPage : 3,
+        numPages : 1
     };
 
     // Usea passed in id to check a checkbox
@@ -164,38 +167,33 @@ class TodoContainer extends React.Component {
         this.setState({ searchTerm: this.state.searchTerm})
     }
     // passes in todos list and the search object and populates an array with matches
-    handleSearch = (todos, search) => {
+    handleSearch = (todos, search, page_number) => {
         
-        if(!search) return todos;
-        if(!search.search) return todos;
+        if(!search) 
+            return todos.slice((page_number - 1) * this.state.itemsPerPage,
+            page_number * this.state.itemsPerPage);
+        if(!search.search) 
+            return todos.slice((page_number - 1) * this.state.itemsPerPage,
+            page_number * this.state.itemsPerPage);
         let arr = [];
         for(let todo of todos) {
             if(todo.title.indexOf(search.search) >= 0) {
                 arr.push(todo)
             }
         }
-        return arr
+
+        return arr.slice((page_number - 1) * this.state.itemsPerPage,
+        page_number * this.state.itemsPerPage);
+
     }
     // page change handler:
     // on change display up to five items based on what page is current
     pageChange = (page) => {
-        // itemsPerPage determines number of todos displayed on each page
-        // !!!!! itemsPerPage must also be changed in PaginationComp line 17 !!!!!
-        // find a way to pass this efficiently 
-        const itemsPerPage = 3;
-        let arr = [];
-
-        if(page.newPage === 1) {
-            arr.push(this.state.todos.slice(0, itemsPerPage));
-        } 
-        else {
-            arr.push(this.state.todos.slice((page.newPage - 1) * itemsPerPage, page.newPage * itemsPerPage));
-        }
-
-        return arr;
-        // localStorage.setItem("todos", JSON.stringify(arr))
-        
-        
+        this.setState({ currentPage : page.newPage })
+    }
+    // change the size of the array when necessary
+    calcNumPages = (arr) => {
+        this.setState({ numPages : Math.ceil(arr.length/this.state.itemsPerPage) })
     }
 
     render () {
@@ -216,7 +214,7 @@ class TodoContainer extends React.Component {
                 <InputTodo addTodoProps={this.addTodoItem} />
 
                 <TodosList 
-                    todos={this.handleSearch(this.state.todos, this.state.searchTerm)} 
+                    todos={this.handleSearch(this.state.todos, this.state.searchTerm, this.state.currentPage)} 
                     handleChangeProps={this.handleChange}
                     deleteTodoProps={this.deleteTodo}
                     editTodoProps={this.handleClickOpen}
@@ -262,9 +260,10 @@ class TodoContainer extends React.Component {
                 
                 {/* Pagination */}
                 <Box component="span">
-                    <PaginationComp 
-                        todos={this.state.todos} 
+                    <PaginationComp
+                        todos={this.state.todos}
                         handlePageChange={this.pageChange}
+                        numPages = {Math.ceil(this.state.todos.length/this.state.itemsPerPage)}
                     />
                 </Box>
             </div>

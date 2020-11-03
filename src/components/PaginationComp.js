@@ -2,11 +2,8 @@ import React from 'react'
 import Pagination from '@material-ui/lab/Pagination';
 
 class PaginationComp extends React.Component { 
-    constructor(props) {
-        super(props);
-        this.state = {currentPage : 1}
-    }
-    // give the page number that needs to be displayed
+    
+    // gives the page number that needs to be displayed
     onPageChange = (event, newPage) => {
         this.setState({currentPage : newPage})
         // return the page
@@ -14,16 +11,15 @@ class PaginationComp extends React.Component {
     }
 
     render () {
-        const itemsPerPage = 3;
-        const numPages = Math.ceil(this.props.todos.length/itemsPerPage);
+        
         return (
             <Pagination 
-                count={numPages} 
+                count={this.props.numPages} 
                 size='medium'
                 className="pagination-container"
                 defaultPage={1}
-                value = {this.state.currentPage}
-                page={this.state.currentPage}
+                value = {this.props.currentPage}
+                page={this.props.currentPage}
                 onChange={this.onPageChange} // sets value of page
             />
         )

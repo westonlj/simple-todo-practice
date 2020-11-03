@@ -106,7 +106,7 @@ body {
   outline: none;
 }
 .todo-list {
-  height: 600px;
+  height: 400px;
 }
 .todo-item {
   list-style-type: none;
