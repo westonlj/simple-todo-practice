@@ -3,6 +3,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import TodoContainer from './components/TodoContainer';
 
+import './iron-flex-layout.css';
+import './iron-flex-layout-classes.css';
 import logo from './krum-gear.png';
 // TODO: 
 // add styling similar to the todo,
@@ -58,10 +60,14 @@ class LoginPage extends React.Component {
     render() {
         if(!sessionStorage.getItem('LoginInfo')) {
             return (
+
                 !this.state.isLoggedIn ?
+
                     <form onSubmit={this.handleSubmit} className="layout-main-container">
-                        <div className="login-container">
-                            <div className="layout-horizontal">
+
+                        <div className="layout vertical login-container">
+
+                            <div className="layout horizontal center center-justified app-logo-container">
                                 <img 
                                     src={logo}
                                     className="app-logo"
@@ -69,45 +75,79 @@ class LoginPage extends React.Component {
                                     alt="Todo Logo"
                                     />
                             </div>
+
                             <div className="layout-horizontal">
+
                                 <span className="app-title">Welcome, please login</span>
+                            
                             </div>
+                            
                             {/* Input container */}
                             <div className="login-input-container">
-                                <div className="layout-horizontal">
+                                
+                                <div className="layout horizontal">
+                                
                                     <TextField 
                                         type="email"
-                                        label="Username"
+                                        label="Email"
                                         placeholder="Enter Email"
+                                        className="flex"
                                         value={this.state.email}
+                                        margin="normal"
                                         name="username"
                                         onChange={this.onChange}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
                                     />
+                                
                                 </div>
-                                <div className="layout-horizontal">
+                                
+                                <div className="layout horizontal">
+                                
                                     <TextField
-                                        className=""
                                         type="password"
                                         label="Password"
                                         placeholder="Enter password"
+                                        className="flex"
                                         value={this.state.password}
+                                        margin="normal"
                                         name="password"
                                         onChange={this.onChange}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
                                     />
+                                
                                 </div>
+                                
+                                <div className="height-20"></div>
+
+                                <div className="layout horizontal">
+                                
+                                    <Button
+                                        className="flex input-submit"
+                                        fullWidth variant="contained"
+                                        type="submit"
+                                        onKeyDown={this.handleSubmit}
+                                        color="primary"
+                                        style={{maxWidth: "unset"}}
+                                    >
+                                    Login
+                                    </Button>
+                                
+                                </div>
+
                             </div>
-                            <div className="layout-horizontal">
-                                <Button
-                                className="input-submit"
-                                fullWidth variant="contained"
-                                type="submit"
-                                onKeyDown={this.handleSubmit}
-                                color="primary"
-                                >
-                                Login
-                                </Button>
-                            </div>
+
+                                <div className="login-section-break"></div>
+
+                                <div className="layout horizontal center center-justified request-account-section">
+                                    <span>Don't have an account? </span> &nbsp; <a href="https://www.google.com">Request access</a>
+                                </div>
+
                         </div>
+                    
                     </form>
                 //isLoggedIn is true
                 : <TodoContainer/>
