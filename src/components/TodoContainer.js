@@ -26,7 +26,7 @@ import PaginationComp from './PaginationComp';
 // caused some messy code and value to be passed around at random.
 
 class TodoContainer extends React.Component {
-    // executed once on page load
+    // executed once on page load after an initial page render
     // constructor(props, context) {
     //     super(props, context);
     //     if(localStorage.getItem('todos'))
