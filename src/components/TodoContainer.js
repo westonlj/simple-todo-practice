@@ -39,7 +39,8 @@ class TodoContainer extends React.Component {
 
             // this.state.todos = this.pageChange(1)
             this.setState ({
-                todos : JSON.parse(localStorage.getItem('todos'))
+                todos : JSON.parse(localStorage.getItem('todos')),
+                // numPages : Math.ceil(JSON.parse(localStorage.getItem('searchTodos')).length/3)
             })
     }
 
@@ -51,7 +52,7 @@ class TodoContainer extends React.Component {
         currentTitle : '',
         currentPage : 1,
         itemsPerPage : 3,
-        numPages : 1
+        // numPages : Math.ceil(JSON.parse(localStorage.getItem('searchTodos')).length/3)
     };
 
     // handle the checkbox completion being marked
@@ -66,6 +67,8 @@ class TodoContainer extends React.Component {
         });
         let todos = this.state.todos;
         localStorage.setItem("todos", JSON.stringify(todos))
+        //update array copy for search
+        localStorage.setItem("searchTodos", JSON.stringify(todos))
     };
     // ERROR IN THIS FUNCTION
     // Uses id to delete from array of todos and update the localStorage
@@ -79,6 +82,8 @@ class TodoContainer extends React.Component {
         let todosClone = JSON.parse(localStorage.getItem('todos'));
         todosClone.splice(id, 1)
         localStorage.setItem('todos', JSON.stringify(todosClone))
+        // update array clone
+        localStorage.setItem("searchTodos", JSON.stringify(todosClone))
         // Error in this function
         this.setState({
             // filter() creates a new array
@@ -87,9 +92,7 @@ class TodoContainer extends React.Component {
                     return todo.id !== id;
                 })
             ]
-            // todos:JSON.parse(localStorage.getItem('todos'))
         });
-        // localStorage.setItem('todos', JSON.stringify(todosClone))
     };
 
     // Add a new item with a unique id and title passed up from
@@ -103,14 +106,16 @@ class TodoContainer extends React.Component {
         // check if a todos key in localStorage exists
         // if null then create one by adding the newTodo object above
         // if it does exist: retrieve from storage and update
-        if(localStorage.getItem('todos') === null) {
+        if(localStorage.getItem("todos") === null) {
             const todos = []
             todos.push(newTodo);
             localStorage.setItem("todos", JSON.stringify(todos));
+            localStorage.setItem("searchTodos", JSON.stringify(todos))
         } else {
             const todos = JSON.parse(localStorage.getItem('todos'))
             todos.push(newTodo);
             localStorage.setItem("todos", JSON.stringify(todos))
+            localStorage.setItem("searchTodos", JSON.stringify(todos))
         }
 
         // update the state
@@ -129,6 +134,8 @@ class TodoContainer extends React.Component {
                 todo.title = this.state.value
                 // update localStorage
                 localStorage.setItem("todos", JSON.stringify(todos))
+                // update the copied array
+                localStorage.setItem("searchTodos", JSON.stringify(todos))
             } 
         }
 
@@ -169,21 +176,26 @@ class TodoContainer extends React.Component {
     }
     // passes in todos list and the search object and populates an array with matches
     handleSearch = (todos, search, page_number) => {
-        
-        if(!search) 
+        // if no search occurs keep/update searchTodos = todos
+        if(!search) {
+            localStorage.setItem("searchTodos", JSON.stringify(todos))
             return todos.slice((page_number - 1) * this.state.itemsPerPage,
             page_number * this.state.itemsPerPage);
-        if(!search.search)
+        }
+        if(!search.search) {
+            localStorage.setItem("searchTodos", JSON.stringify(todos))
             return todos.slice((page_number - 1) * this.state.itemsPerPage,
             page_number * this.state.itemsPerPage);
+        }
         let arr = [];
         for(let todo of todos) {
             if(todo.title.indexOf(search.search) >= 0) {
                 arr.push(todo)
+                localStorage.setItem("searchTodos", JSON.stringify(arr))
             }
         }
+        console.log(localStorage.getItem("searchTodos"))
 
-        // use local storage or session storage to save arr to be accessed by pagination?
         return arr.slice((page_number - 1) * this.state.itemsPerPage,
         page_number * this.state.itemsPerPage);
 
@@ -193,10 +205,6 @@ class TodoContainer extends React.Component {
     pageChange = (page) => {
         this.setState({ currentPage : page.newPage })
     }
-    // change the total number of pages
-    // calcNumPages = (arr) => {
-    //     this.setState({ numPages : Math.ceil(arr.length/this.state.itemsPerPage) })
-    // }
 
     render () {
         
@@ -254,11 +262,12 @@ class TodoContainer extends React.Component {
                 </Dialog>
                 
                 {/* Pagination */}
+                {console.log(Math.ceil((JSON.parse(localStorage.getItem('searchTodos')).length)))}
                 <Box component="span">
                     <PaginationComp
                         todos={this.state.todos}
                         handlePageChange={this.pageChange}
-                        numPages = {Math.ceil(this.state.todos.length/this.state.itemsPerPage)}
+                        numPages = {Math.ceil(((JSON.parse(localStorage.getItem('searchTodos')).length)/this.state.itemsPerPage))}
                     />
                 </Box>
             </div>

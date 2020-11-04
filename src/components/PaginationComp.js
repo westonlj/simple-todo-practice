@@ -25,20 +25,5 @@ class PaginationComp extends React.Component {
         )
     }
 }
- // filterArray = (props) => {
-    //     const itemsPerPage = this.state;
-    //     let todoList = this.props.todos
-    //     const startIndex = (this.state.currentPage - 1) * itemsPerPage
-    //     const endIndex = (this.state.currentPage * itemsPerPage)
 
-    //     //todoList = todoList.slice(startIndex, endIndex);
-
-    //     console.log("printing todoList: " + todoList)
-
-    //     this.setState({
-    //         // todoList,
-    //         currentPage: 1,
-    //         maxPage : todoList.length === 0 ? 1 : todoList.length
-    //     })
-    // }
 export default PaginationComp
