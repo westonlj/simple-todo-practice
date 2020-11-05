@@ -26,13 +26,6 @@ import PaginationComp from './PaginationComp';
 // caused some messy code and value to be passed around at random.
 
 class TodoContainer extends React.Component {
-    // executed once on page load after an initial page render
-    // constructor(props, context) {
-    //     super(props, context);
-    //     if(localStorage.getItem('todos'))
-    //         this.state.todos = JSON.parse(localStorage.getItem('todos'));
-    // }
-
     // lifeCycle function
     componentDidMount() {
         if(localStorage.getItem('todos'))
@@ -40,19 +33,45 @@ class TodoContainer extends React.Component {
             // this.state.todos = this.pageChange(1)
             this.setState ({
                 todos : JSON.parse(localStorage.getItem('todos')),
-                // numPages : Math.ceil(JSON.parse(localStorage.getItem('searchTodos')).length/3)
             })
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        
+        if(JSON.stringify(this.state.todos) !== JSON.stringify(prevState.todos) || this.state.searchTerm !== prevState.searchTerm) {
+            let arr = [];
+            if(this.state.searchTerm) {
+                for(let todo of this.state.todos) {
+                    if(todo.title.indexOf(this.state.searchTerm) >= 0) {
+                        arr.push(todo)
+                    }
+                }
+                this.setState({
+                    todos : this.state.todos,
+                    currentTodos : arr,
+                    numPages : Math.ceil(((arr.length)/this.state.itemsPerPage))
+                })
+            } else {
+                this.setState({
+                    todos : this.state.todos,
+                    currentTodos : this.state.todos,
+                    numPages : Math.ceil(((this.state.todos.length)/this.state.itemsPerPage))
+                })
+            }
+            
+        }
     }
 
     state = {
         todos : [{id : '', title : '', completed : false}],
+        currentTodos : [],
         open : false,
         editValue : '',
         currentId : '',
         currentTitle : '',
         currentPage : 1,
         itemsPerPage : 3,
-        // numPages : Math.ceil(JSON.parse(localStorage.getItem('searchTodos')).length/3)
+        numPages : 0
     };
 
     // handle the checkbox completion being marked
@@ -67,8 +86,6 @@ class TodoContainer extends React.Component {
         });
         let todos = this.state.todos;
         localStorage.setItem("todos", JSON.stringify(todos))
-        //update array copy for search
-        localStorage.setItem("searchTodos", JSON.stringify(todos))
     };
     // ERROR IN THIS FUNCTION
     // Uses id to delete from array of todos and update the localStorage
@@ -110,12 +127,10 @@ class TodoContainer extends React.Component {
             const todos = []
             todos.push(newTodo);
             localStorage.setItem("todos", JSON.stringify(todos));
-            localStorage.setItem("searchTodos", JSON.stringify(todos))
         } else {
             const todos = JSON.parse(localStorage.getItem('todos'))
             todos.push(newTodo);
             localStorage.setItem("todos", JSON.stringify(todos))
-            localStorage.setItem("searchTodos", JSON.stringify(todos))
         }
 
         // update the state
@@ -131,18 +146,16 @@ class TodoContainer extends React.Component {
         let todos = this.state.todos;
         for(let todo of todos) {
             if(todo.id === this.state.currentId) {
-                todo.title = this.state.value
+                todo.title = this.state.editValue
                 // update localStorage
                 localStorage.setItem("todos", JSON.stringify(todos))
-                // update the copied array
-                localStorage.setItem("searchTodos", JSON.stringify(todos))
             } 
         }
 
         this.setState({
             todos: JSON.parse(JSON.stringify(todos)),
             open: false,
-            value: '',
+            editValue: '',
             currentId: '',
             currentTitle: ''
         })
@@ -169,34 +182,25 @@ class TodoContainer extends React.Component {
     };
     // Search through list of todos with an exact title match
     onSearch = (searchTodo) => {
-        // search through the list of todos for one with an exact title match
         // eslint-disable-next-line
-        this.state.searchTerm = searchTodo;
-        this.setState({ searchTerm: this.state.searchTerm})
+        // this.state.searchTerm = searchTodo;
+        this.setState({ searchTerm: searchTodo.search})
     }
     // passes in todos list and the search object and populates an array with matches
-    handleSearch = (todos, search, page_number) => {
+    handlePagination = (todos, page_number) => {
         // if no search occurs keep/update searchTodos = todos
-        if(!search) {
-            localStorage.setItem("searchTodos", JSON.stringify(todos))
-            return todos.slice((page_number - 1) * this.state.itemsPerPage,
-            page_number * this.state.itemsPerPage);
-        }
-        if(!search.search) {
-            localStorage.setItem("searchTodos", JSON.stringify(todos))
-            return todos.slice((page_number - 1) * this.state.itemsPerPage,
-            page_number * this.state.itemsPerPage);
-        }
-        let arr = [];
-        for(let todo of todos) {
-            if(todo.title.indexOf(search.search) >= 0) {
-                arr.push(todo)
-                localStorage.setItem("searchTodos", JSON.stringify(arr))
-            }
-        }
-        console.log(localStorage.getItem("searchTodos"))
+        // if(!search) {
+        //     // localStorage.setItem("searchTodos", JSON.stringify(todos))
+        //     return todos.slice((page_number - 1) * this.state.itemsPerPage,
+        //     page_number * this.state.itemsPerPage);
+        // }
+        // if(!search.search) {
+        //     // localStorage.setItem("searchTodos", JSON.stringify(todos))
+        //     return todos.slice((page_number - 1) * this.state.itemsPerPage,
+        //     page_number * this.state.itemsPerPage);
+        // }
 
-        return arr.slice((page_number - 1) * this.state.itemsPerPage,
+        return todos.slice((page_number - 1) * this.state.itemsPerPage,
         page_number * this.state.itemsPerPage);
 
     }
@@ -224,7 +228,7 @@ class TodoContainer extends React.Component {
                 <InputTodo addTodoProps={this.addTodoItem} />
 
                 <TodosList
-                    todos={this.handleSearch(this.state.todos, this.state.searchTerm, this.state.currentPage)} 
+                    todos={this.handlePagination(this.state.currentTodos, this.state.currentPage)} 
                     handleChangeProps={this.handleChange}
                     deleteTodoProps={this.deleteTodo}
                     editTodoProps={this.handleClickOpen}
@@ -262,12 +266,11 @@ class TodoContainer extends React.Component {
                 </Dialog>
                 
                 {/* Pagination */}
-                {console.log(Math.ceil((JSON.parse(localStorage.getItem('searchTodos')).length)))}
                 <Box component="span">
                     <PaginationComp
                         todos={this.state.todos}
                         handlePageChange={this.pageChange}
-                        numPages = {Math.ceil(((JSON.parse(localStorage.getItem('searchTodos')).length)/this.state.itemsPerPage))}
+                        numPages = {this.state.numPages}
                     />
                 </Box>
             </div>

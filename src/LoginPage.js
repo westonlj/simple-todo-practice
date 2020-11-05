@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import TodoContainer from './components/TodoContainer';
+import TodoContainerFunctional from './components/TodoContainerFunctional';
 
 import './iron-flex-layout.css';
 import './iron-flex-layout-classes.css';
@@ -150,10 +150,10 @@ class LoginPage extends React.Component {
                     
                     </form>
                 //isLoggedIn is true
-                : <TodoContainer/>
+                : <TodoContainerFunctional/>
             )
         } else {
-            return(<TodoContainer/>)
+            return(<TodoContainerFunctional/>)
         }
     }
 }
