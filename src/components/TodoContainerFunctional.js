@@ -26,7 +26,7 @@ function TodoContainerFunctional() {
     const [currentTitle, setCurrentTitle] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(3); // need to add ability to choose number of items displayed
-    const [numPages, setNumPages] = useState(0);
+    // const [numPages, setNumPages] = useState(0);
     const [searchTerm, setSearchTerm] = useState('');
     
     useEffect(() => {
@@ -40,10 +40,6 @@ function TodoContainerFunctional() {
         //     // runs when a component is destroyed
         // }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-    // useEffect(() => {
-       
-
-    // }, [searchTerm])
 
     const addTodoItem = (title) => {
         const addTodo = {
@@ -63,17 +59,10 @@ function TodoContainerFunctional() {
         setTodos(JSON.parse(localStorage.getItem('todos')))
         setCurrentTodos(JSON.parse(localStorage.getItem('todos')))
     }
-    
-    const deleteTodo = (id) => {
-        let todosClone = JSON.parse(localStorage.getItem('todos'));
-        todosClone.splice(id, 1)
-        localStorage.setItem('todos', JSON.stringify(todosClone))
-        // Error in this function
-        setTodos(
-                ...todos.filter(todo => {
-                    return todo.id !== id;
-                })
-        );
+
+    const handlePagination = (todos, page_number) => {
+        console.log(todos);
+        return todos.slice((page_number - 1) * itemsPerPage, page_number * itemsPerPage);
     }
 
     const handleChange = (id) => {
@@ -88,6 +77,18 @@ function TodoContainerFunctional() {
         localStorage.setItem("todos", JSON.stringify(editTodo))
     }
 
+    const deleteTodo = (id) => {
+        let todosClone = JSON.parse(localStorage.getItem('todos'));
+        todosClone.splice(id, 1)
+        localStorage.setItem('todos', JSON.stringify(todosClone))
+        // Error in this function
+        setTodos(
+                ...todos.filter(todo => {
+                    return todo.id !== id;
+                })
+        );
+    }
+
     const handleClickOpen = (id, title) => {
         setOpen(true)
         setCurrentId(id)
@@ -99,14 +100,14 @@ function TodoContainerFunctional() {
         setEditValue('')
     }
 
+    const handleEdit = (e) => {
+        setEditValue(e.target.value)
+    }
+
     const pageChange = (page) => {
         console.log("pageChange: ", page.newPage)
         setCurrentPage(page.newPage)
         // console.log(currentPage)
-    }
-
-    const handleEdit = (e) => {
-        setEditValue(e.target.value)
     }
 
     const editTodo = () => {
@@ -128,11 +129,6 @@ function TodoContainerFunctional() {
     const handleNumPages = () => {
         console.log("handleNumPage: " , (Math.ceil((currentTodos.length/ itemsPerPage))))
         return(Math.ceil((currentTodos.length/ itemsPerPage)))
-    }
-
-    const handlePagination = (todos, page_number) => {
-        console.log(todos);
-        return todos.slice((page_number - 1) * itemsPerPage, page_number * itemsPerPage);
     }
 
     const onSearch = (searchTodo) => {
