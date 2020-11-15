@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-// import TodoContainer from './components/TodoContainer';
+import { Provider } from 'react-redux';
 import LoginPage from './LoginPage';
+import store from './redux/store/store.js'
 
 import './iron-flex-layout.css';
 import './iron-flex-layout-classes.css';
@@ -11,7 +12,9 @@ import "./App.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <LoginPage />
+    <Provider store={store}>
+      <LoginPage />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

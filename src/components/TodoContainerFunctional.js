@@ -32,7 +32,6 @@ function TodoContainerFunctional() {
     useEffect(() => {
         // code here get executed when a component is loaded
         if(localStorage.getItem('todos')) {
-            console.log("anything")
             setTodos(JSON.parse(localStorage.getItem('todos')))
             setCurrentTodos(JSON.parse(localStorage.getItem('todos')))
         }
@@ -56,15 +55,16 @@ function TodoContainerFunctional() {
             newTodo.push(addTodo);
             localStorage.setItem("todos", JSON.stringify(newTodo))
         }
+        // add to the todos list
         setTodos(JSON.parse(localStorage.getItem('todos')))
         setCurrentTodos(JSON.parse(localStorage.getItem('todos')))
     }
-
+    // Display certain number of items per page
     const handlePagination = (todos, page_number) => {
-        console.log(todos);
+        // console.log(todos);
         return todos.slice((page_number - 1) * itemsPerPage, page_number * itemsPerPage);
     }
-
+    // Change checkbox to true or false when clicked
     const handleChange = (id) => {
         
         setTodos(todos.map(todo => {
@@ -76,11 +76,8 @@ function TodoContainerFunctional() {
         let editTodo = todos;
         localStorage.setItem("todos", JSON.stringify(editTodo))
     }
-
+    // this function is broken!
     const deleteTodo = (id) => {
-        let todosClone = JSON.parse(localStorage.getItem('todos'));
-        todosClone.splice(id, 1)
-        localStorage.setItem('todos', JSON.stringify(todosClone))
         // Error in this function
         setTodos(
                 ...todos.filter(todo => {
