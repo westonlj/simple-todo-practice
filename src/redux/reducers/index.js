@@ -17,8 +17,8 @@ const initialState = {
     currentPage: 1,
     itemsPerPage: 3
 }
-// sets the initial state
-function reducer(state = initialState, action) {
+// Recall that for each reducer we want to expand (...) state so that we don't overwrite everything we have
+function rootReducer(state = initialState, action) {
     switch (action.type) {
 
         // need to add the actions
@@ -38,4 +38,4 @@ function reducer(state = initialState, action) {
     }
 }
 
-export default reducer;
+export default rootReducer;

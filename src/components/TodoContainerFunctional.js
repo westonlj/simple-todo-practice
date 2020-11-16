@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { connect } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog'
@@ -210,5 +211,5 @@ function TodoContainerFunctional() {
         </div>
     )
 }
-
-export default TodoContainerFunctional
+// connecting component to the store???
+export default connect()(TodoContainerFunctional)
