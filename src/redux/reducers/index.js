@@ -29,10 +29,15 @@ function rootReducer(state = initialState, action) {
             
             // passed in the todo object : {id, title, completed}
             
-            return console.log(JSON.stringify({
+            console.log(JSON.parse(JSON.stringify({
                 ...state, // avoids overwritting the state when necessary
                 todos: [...state.todos, action.payload],
-            }))
+            })))
+
+            return JSON.parse((JSON.stringify({
+                ...state, // avoids overwritting the state when necessary
+                todos: [...state.todos, action.payload],
+            })))
         }
         
         // EDIT_TODOS

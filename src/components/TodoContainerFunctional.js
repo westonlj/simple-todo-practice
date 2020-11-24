@@ -20,7 +20,7 @@ import { addNewTodo, checkTodo } from '../../src/redux/actions/index';
 // make sure to print when you're lost/confused
 
 const mapstate2props = state => {
-    // console.log(state)
+    console.log(state)
     return {
         todos : state.todos
     }
