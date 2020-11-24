@@ -9,7 +9,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-// import Tooltip from '@material-ui/core/Tooltip';
 
 import TodosList from './TodosList';
 import Header from './Header';
@@ -17,7 +16,25 @@ import InputTodo from './InputTodo';
 import SearchBar from './SearchBar';
 import PaginationComp from './PaginationComp';
 
-function TodoContainerFunctional() {
+import { addNewTodo, checkTodo } from '../../src/redux/actions/index';
+// make sure to print when you're lost/confused
+
+const mapstate2props = state => {
+    // console.log(state)
+    return {
+        todos : state.todos
+    }
+}
+
+const mapdispatch2props = dispatch => {
+    return {
+        addNewTodo : (payload, callback) => dispatch(addNewTodo(payload, callback)),
+        checkTodo : (payload) => dispatch(checkTodo(payload))
+    }
+}
+
+function TodoContainerFunctional(props) {
+
     const [todos, setTodos] = useState([{id: '', title: '', completed: false}]);
     const [currentTodos, setCurrentTodos] = useState([]);
     // edit states
@@ -25,6 +42,7 @@ function TodoContainerFunctional() {
     const [editValue, setEditValue] = useState('');
     const [currentId, setCurrentId] = useState('');
     const [currentTitle, setCurrentTitle] = useState('');
+    // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(3); // need to add ability to choose number of items displayed
     // const [numPages, setNumPages] = useState(0);
@@ -36,9 +54,6 @@ function TodoContainerFunctional() {
             setTodos(JSON.parse(localStorage.getItem('todos')))
             setCurrentTodos(JSON.parse(localStorage.getItem('todos')))
         }
-        // return () => {
-        //     // runs when a component is destroyed
-        // }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     const addTodoItem = (title) => {
@@ -48,6 +63,12 @@ function TodoContainerFunctional() {
             completed: false,
         };
         let newTodo = []
+
+        // ACTION CALL FOR ADDING A NEW TODO
+        // here we make a call to addNewTodo action and pass in title
+        props.addNewTodo( addTodo )
+
+
         if(localStorage.getItem("todos") === null) {
             newTodo.push(addTodo);
             localStorage.setItem("todos", JSON.stringify(newTodo));
@@ -67,7 +88,10 @@ function TodoContainerFunctional() {
     }
     // Change checkbox to true or false when clicked
     const handleChange = (id) => {
-        
+        //
+        // redux action call
+        props.checkTodo(id)
+
         setTodos(todos.map(todo => {
             if (todo.id === id) {
                 todo.completed = !todo.completed;
@@ -188,6 +212,7 @@ function TodoContainerFunctional() {
                                 type="text"
                                 value={editValue}
                                 onChange={handleEdit}
+                                
                             />
                         </DialogContent>
 
@@ -206,10 +231,11 @@ function TodoContainerFunctional() {
                 <PaginationComp 
                     handlePageChange={pageChange}
                     numPage={handleNumPages()}
+                    getDataSet = {handleEdit}
                 />
             </Box>
         </div>
     )
 }
-// connecting component to the store???
-export default connect()(TodoContainerFunctional)
+// mapstate2props and mapdispatch2props in connect()
+export default connect(mapstate2props,mapdispatch2props)(TodoContainerFunctional)
